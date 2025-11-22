@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xtrathis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #e8e8e8;
+            overflow-x: hidden;
+            font-family: 'Cormorant Garamond', serif;
+            position: relative;
+        }
+
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(120, 10, 10, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(120, 10, 10, 0.1) 0%, transparent 40%),
+                linear-gradient(135deg, rgba(20, 20, 20, 0.97) 0%, rgba(10, 10, 10, 1) 100%);
+            background-blend-mode: overlay;
+            z-index: -2;
+        }
+
+       
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.05) 2px, transparent 0),
+                radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 30px 30px, 20px 20px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(200, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            position: relative;
+            color: #e8e8e8;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #c00, transparent);
+        }
+
+        .quote-section {
+            position: relative;
+        }
+
+        .quote-display {
+            font-size: 14px;
+            letter-spacing: 1px;
+            font-style: italic;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 2px;
+            transition: all 0.3s;
+            max-width: 300px;
+            text-align: center;
+            border: 1px solid rgba(200, 0, 0, 0.3);
+            background: rgba(20, 20, 20, 0.7);
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .quote-display:hover {
+            background: rgba(200, 0, 0, 0.1);
+            border-color: rgba(200, 0, 0, 0.5);
+        }
+
+        
+        .quote-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(5, 5, 5, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .quote-content {
+            background-color: rgba(15, 15, 15, 0.95);
+            border: 1px solid rgba(200, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+            border-radius: 2px;
+            box-shadow: 0 0 50px rgba(200, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .quote-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #c00, transparent);
+        }
+
+        .quote-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(200, 0, 0, 0.2);
+        }
+
+        .quote-header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            letter-spacing: 2px;
+            font-weight: 500;
+            color: #e8e8e8;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #e8e8e8;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            color: #c00;
+        }
+
+        .quote-list {
+            list-style: none;
+        }
+
+        .quote-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .quote-item:last-child {
+            border-bottom: none;
+        }
+
+        .quote-text {
+            font-style: italic;
+            margin-bottom: 8px;
+            line-height: 1.6;
+            font-size: 17px;
+            color: #e8e8e8;
+        }
+
+        .quote-date {
+            font-size: 13px;
+            color: #c00;
+            letter-spacing: 1px;
+        }
+
+       
+        .main-content {
+            display: flex;
+            align-items: center;
+            min-height: 80vh;
+            padding: 60px 0;
+            position: relative;
+        }
+
+        .profile-section {
+            display: flex;
+            width: 100%;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .avatar-container {
+            flex: 0 0 350px;
+            position: relative;
+        }
+
+        .avatar-frame {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(200, 0, 0, 0.4);
+            box-shadow: 
+                0 0 30px rgba(200, 0, 0, 0.2),
+                inset 0 0 30px rgba(200, 0, 0, 0.1);
+            animation: glow 6s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 
+                    0 0 20px rgba(200, 0, 0, 0.2),
+                    inset 0 0 20px rgba(200, 0, 0, 0.1);
+            }
+            100% {
+                box-shadow: 
+                    0 0 40px rgba(200, 0, 0, 0.4),
+                    inset 0 0 40px rgba(200, 0, 0, 0.2);
+            }
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(30%) contrast(110%);
+            transition: filter 0.5s;
+        }
+
+        .avatar:hover {
+            filter: grayscale(0%) contrast(120%);
+        }
+
+        .avatar-frame::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border: 1px solid rgba(200, 0, 0, 0.2);
+            border-radius: 50%;
+            z-index: -1;
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .info-section {
+            flex: 1;
+        }
+
+        .name {
+            font-family: 'Cinzel', serif;
+            font-size: 52px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            letter-spacing: 3px;
+            position: relative;
+            display: inline-block;
+            color: #e8e8e8;
+        }
+
+        .name::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, #c00, transparent);
+        }
+
+        .intro {
+            font-size: 19px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            color: rgba(232, 232, 232, 0.8);
+            max-width: 600px;
+            text-align: justify;
+            font-weight: 300;
+        }
+
+       
+        .buttons-section {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            background: transparent;
+            border: 1px solid rgba(200, 0, 0, 0.5);
+            color: #e8e8e8;
+            font-size: 16px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            font-family: 'Cinzel', serif;
+            font-weight: 500;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(200, 0, 0, 0.1), rgba(120, 0, 0, 0.2));
+            transition: width 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 100%;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        .btn:hover {
+            border-color: #c00;
+            box-shadow: 
+                0 0 25px rgba(200, 0, 0, 0.4),
+                inset 0 0 15px rgba(200, 0, 0, 0.1);
+            background: rgba(200, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+       
+        .ornament {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(ellipse, rgba(200, 0, 0, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(10px);
+        }
+
+        .ornament-1 {
+            top: 10%;
+            right: 5%;
+        }
+
+        .ornament-2 {
+            bottom: 20%;
+            left: 5%;
+        }
+
+        .baroque-border {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .border-top {
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(90deg, transparent, #c00, transparent);
+            opacity: 0.3;
+        }
+
+        .border-bottom {
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(90deg, transparent, #c00, transparent);
+            opacity: 0.3;
+        }
+
+        .border-left {
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 20px;
+            background: linear-gradient(180deg, transparent, #c00, transparent);
+            opacity: 0.3;
+        }
+
+        .border-right {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 20px;
+            background: linear-gradient(180deg, transparent, #c00, transparent);
+            opacity: 0.3;
+        }
+
+        
+        @media (max-width: 992px) {
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .avatar-container {
+                flex: 0 0 280px;
+            }
+            
+            .avatar-frame {
+                width: 280px;
+                height: 280px;
+            }
+            
+            .name {
+                font-size: 42px;
+            }
+            
+            .intro {
+                font-size: 18px;
+            }
+            
+            .buttons-section {
+                justify-content: center;
+            }
+            
+            .quote-display {
+                max-width: 220px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .buttons-section {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .btn {
+                width: 220px;
+            }
+            
+            .quote-display {
+                max-width: 280px;
+                font-size: 14px;
+            }
+            
+            .name {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="baroque-border border-top"></div>
+    <div class="baroque-border border-bottom"></div>
+    <div class="baroque-border border-left"></div>
+    <div class="baroque-border border-right"></div>
+    
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">My blog</div>
+            <div class="quote-section">
+                <div class="quote-display" id="quoteDisplay">"lol"</div>
+            </div>
+        </nav>
+
+        <section class="main-content">
+            <div class="profile-section">
+                <div class="avatar-container">
+                    <div class="avatar-frame">
+                        <img src="xy.jpg" alt="头像" class="avatar">
+                    </div>
+                </div>
+                <div class="info-section">
+                    <h1 class="name">Xyrathis</h1>
+                    <p class="intro">
+                        INTP-BA-MF LII-C 5w4 541 RLOEI sp/sx <br>
+                        Bayesian(Stoicism(Phenomenology)→Cybernetics(ScientificAnti-Realism)→GameTheory(TranscendentalPhilosophy))→ScientificReductionism(合同异/离坚白)
+                    </p>
+                    <div class="buttons-section">
+                        <button class="btn" onclick="window.open('project.html', '_self')">My project</button>
+                        <button class="btn" onclick="window.open('art.html', '_self')">My art</button>
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="ornament ornament-1"></div>
+            <div class="ornament ornament-2"></div>
+        </section>
+    </div>
+
+
+    <div class="quote-modal" id="quoteModal">
+        <div class="quote-content">
+            <div class="quote-header">
+                <h2>Saying</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <ul class="quote-list" id="quoteList">
+            
+            </ul>
+        </div>
+    </div>
+
+    <script>
+      
+        const quoteDisplay = document.getElementById('quoteDisplay');
+        const quoteModal = document.getElementById('quoteModal');
+        const closeModal = document.getElementById('closeModal');
+        const quoteList = document.getElementById('quoteList');
+
+      
+        const quotes = [
+            { text: "最珍稀莫过于结构性权利中的独一无二。", date: "2025.10.01" },
+            { text: "Prediction = Control ", date: "2025.08.07" },
+            { text: "To be is to have been.", date: "2025-07-11" },
+            { text: "Aal izz well.", date: "2025-06-05" },
+            { text: "Memoryless property.", date: "2025-01-15" },
+            { text: "规则是惯性，而喜欢是本能。", date: "2024-11-327" },
+            { text: "最孤独的时光塑造最坚韧的自己。", date: "2024-08-25" },
+            { text: "Memoryless property.", date: "2024-01-05" },
+            { text: "足以自杀的勇气和力量同样足以重生。", date: "2023-10-24" },
+            { text: "Only in their dreams can man be turly free. ", date: "2023-09-22" },
+            { text: "世异则事异，事异则备变。", date: "2023-08-05" },
+            { text: "正如最混沌的骚乱也精密有制。", date: "2023-04-20" },
+            { text: "Time is rotting on me.", date: "2023-03-05" },
+            { text: "我的人生不需要向任何人解释。",date: "2022-12-14" },
+            { text: "The fjord itself is as short as a hesitation.", date: "2022-6-30" },
+            { text: "一叶知秋。", date: "2021-02-03" },
+        ];
+
+      
+        function showRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            quoteDisplay.textContent = `"${quotes[randomIndex].text}"`;
+        }
+
+       
+        function showQuoteList() {
+            quoteList.innerHTML = '';
+            quotes.forEach(quote => {
+                const li = document.createElement('li');
+                li.className = 'quote-item';
+                li.innerHTML = `
+                    <div class="quote-text">"${quote.text}"</div>
+                    <div class="quote-date">${quote.date}</div>
+                `;
+                quoteList.appendChild(li);
+            });
+        }
+
+ 
+        quoteDisplay.addEventListener('click', () => {
+            showQuoteList();
+            quoteModal.style.display = 'flex';
+        });
+
+        closeModal.addEventListener('click', () => {
+            quoteModal.style.display = 'none';
+        });
+
+        quoteModal.addEventListener('click', (e) => {
+            if (e.target === quoteModal) {
+                quoteModal.style.display = 'none';
+            }
+        });
+
+       
+        showRandomQuote();
+    </script>
+</body>
+</html>

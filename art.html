@@ -1,630 +1,230 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Music</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: #0a0a0a;
-            color: #e8e8e8;
-            overflow-x: hidden;
-            font-family: 'Cormorant Garamond', serif;
-            position: relative;
-            min-height: 100vh;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(120, 10, 10, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(120, 10, 10, 0.1) 0%, transparent 40%),
-                linear-gradient(135deg, rgba(20, 20, 20, 0.97) 0%, rgba(10, 10, 10, 1) 100%);
-            background-blend-mode: overlay;
-            z-index: -2;
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.05) 2px, transparent 0),
-                radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.05) 1px, transparent 0);
-            background-size: 30px 30px, 20px 20px;
-            z-index: -1;
-            opacity: 0.3;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 40px;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 0;
-            position: relative;
-        }
-
-        .logo {
-            font-family: 'Cinzel', serif;
-            font-size: 26px;
-            font-weight: 600;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            position: relative;
-            color: #e8e8e8;
-            cursor: pointer;
-        }
-
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #c00, transparent);
-        }
-
-        .quote-section {
-            position: relative;
-        }
-
-        .quote-display {
-            font-size: 15px;
-            letter-spacing: 1.5px;
-            font-style: italic;
-            cursor: pointer;
-            padding: 12px 20px;
-            border-radius: 2px;
-            transition: all 0.4s;
-            max-width: 320px;
-            text-align: center;
-            border: 1px solid rgba(200, 0, 0, 0.2);
-            background: rgba(20, 20, 20, 0.5);
-            font-family: 'Cormorant Garamond', serif;
-            backdrop-filter: blur(10px);
-        }
-
-        .quote-display:hover {
-            background: rgba(200, 0, 0, 0.08);
-            border-color: rgba(200, 0, 0, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .page-title {
-            font-family: 'Cinzel', serif;
-            font-size: 52px;
-            font-weight: 600;
-            text-align: center;
-            margin: 80px 0 30px;
-            letter-spacing: 4px;
-            position: relative;
-            color: #e8e8e8;
-        }
-
-        .page-title::after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 180px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #c00, transparent);
-        }
-
-        .page-subtitle {
-            text-align: center;
-            font-size: 20px;
-            margin-bottom: 80px;
-            color: rgba(232, 232, 232, 0.7);
-            font-style: italic;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.7;
-            letter-spacing: 1px;
-        }
-        
-        .music-section {
-            margin-bottom: 100px;
-        }
-
-        .music-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 80px;
-        }
-
-        .music-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .record-player {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 0 auto 30px;
-            cursor: pointer;
-        }
-
-        .record-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            margin: 0 auto;
-        }
-
-        .record {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: 
-                radial-gradient(circle at center, #111 0%, #000 70%),
-                repeating-radial-gradient(circle at center, 
-                    transparent 0%, 
-                    rgba(50, 50, 50, 0.1) 1px, 
-                    transparent 2px,
-                    transparent 10%);
-            box-shadow: 
-                0 0 0 8px #222,
-                0 0 0 10px #111,
-                0 0 20px rgba(0, 0, 0, 0.8),
-                inset 0 0 20px rgba(0, 0, 0, 0.8);
-            transition: transform 0.3s ease;
-            transform-style: preserve-3d;
-            overflow: hidden;
-        }
-
-        .record-cover {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            border-radius: 50%;
-            overflow: hidden;
-            background: #000;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-            z-index: 2;
-        }
-
-        .record-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-
-        .record-center, .record-label {
-            display: none;
-        }
-
-
-        @keyframes slowRotation {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .record-player:hover .record {
-            animation: slowRotation 20s linear infinite;
-        }
-
-        .record-arm {
-            position: absolute;
-            width: 120px;
-            height: 8px;
-            background: linear-gradient(to right, #333, #555, #333);
-            top: 50%;
-            left: 50%;
-            transform-origin: left center;
-            transform: rotate(-30deg);
-            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.3, 1);
-            z-index: 4;
-            border-radius: 4px;
-        }
-
-        .record-arm::before {
-            content: '';
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            background: #333;
-            border-radius: 50%;
-            top: 50%;
-            left: 0;
-            transform: translate(-50%, -50%);
-        }
-
-        .record-arm::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #222;
-            border-radius: 50%;
-            top: 50%;
-            right: -5px;
-            transform: translateY(-50%);
-        }
-
-        .record-player:hover .record-arm {
-            transform: rotate(-10deg);
-        }
-
-        .music-info {
-            text-align: center;
-            padding: 0 10px;
-            width: 100%;
-        }
-
-        .music-title {
-            font-family: 'Cinzel', serif;
-            font-size: 20px;
-            margin-bottom: 8px;
-            letter-spacing: 1.5px;
-            position: relative;
-        }
-
-        .music-artist {
-            font-size: 16px;
-            color: rgba(232, 232, 232, 0.7);
-            margin-bottom: 12px;
-            font-style: italic;
-        }
-
-        .music-description {
-            font-size: 14px;
-            color: rgba(232, 232, 232, 0.6);
-            line-height: 1.5;
-            letter-spacing: 0.5px;
-            font-style: italic;
-        }
-
-        .play-indicator {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background: rgba(200, 0, 0, 0.8);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 5;
-        }
-
-        .record-player:hover .play-indicator {
-            opacity: 1;
-        }
-
-        .play-indicator i {
-            color: #e8e8e8;
-            font-size: 16px;
-        }
-
-        .vinyl-glow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: radial-gradient(circle at center, rgba(200, 0, 0, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.6s ease;
-            pointer-events: none;
-        }
-
-        .record-player:hover .vinyl-glow {
-            opacity: 1;
-        }
-
-        .baroque-border {
-            position: fixed;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .border-top {
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: linear-gradient(90deg, transparent, #c00, transparent);
-            opacity: 0.3;
-        }
-
-        .border-bottom {
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: linear-gradient(90deg, transparent, #c00, transparent);
-            opacity: 0.3;
-        }
-
-        .border-left {
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 20px;
-            background: linear-gradient(180deg, transparent, #c00, transparent);
-            opacity: 0.3;
-        }
-
-        .border-right {
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 20px;
-            background: linear-gradient(180deg, transparent, #c00, transparent);
-            opacity: 0.3;
-        }
-
-        .ornament {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(ellipse, rgba(200, 0, 0, 0.08) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: -1;
-            filter: blur(40px);
-        }
-
-        .ornament-1 {
-            top: 10%;
-            right: 5%;
-        }
-
-        .ornament-2 {
-            bottom: 20%;
-            left: 5%;
-        }
-
-        .back-btn {
-            position: fixed;
-            bottom: 40px;
-            left: 40px;
-            padding: 14px 28px;
-            background: rgba(20, 20, 20, 0.7);
-            border: 1px solid rgba(200, 0, 0, 0.3);
-            color: #e8e8e8;
-            font-size: 14px;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.4s;
-            text-transform: uppercase;
-            font-family: 'Cinzel', serif;
-            font-weight: 500;
-            z-index: 5;
-            backdrop-filter: blur(10px);
-        }
-
-        .back-btn:hover {
-            border-color: #c00;
-            box-shadow: 0 0 25px rgba(200, 0, 0, 0.4);
-            background: rgba(200, 0, 0, 0.05);
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 1200px) {
-            .music-gallery {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 70px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 25px;
-            }
-            
-            .music-gallery {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 60px;
-            }
-            
-            .record-player {
-                width: 240px;
-                height: 240px;
-            }
-            
-            .page-title {
-                font-size: 42px;
-                margin: 60px 0 25px;
-            }
-            
-            .page-subtitle {
-                font-size: 18px;
-                margin-bottom: 60px;
-                padding: 0 20px;
-            }
-            
-            .back-btn {
-                bottom: 25px;
-                left: 25px;
-                padding: 12px 24px;
-                font-size: 13px;
-            }
-            
-            .container {
-                padding: 0 25px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Music</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+background:#0a0a0a;
+color:#e8e8e8;
+font-family:'Cormorant Garamond',serif;
+min-height:100vh;
+position:relative;
+overflow-x:hidden;
+}
+body::before{
+content:'';
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:
+radial-gradient(circle at 20% 30%,rgba(120,10,10,0.15) 0%,transparent 40%),
+radial-gradient(circle at 80% 70%,rgba(120,10,10,0.1) 0%,transparent 40%),
+linear-gradient(135deg,rgba(20,20,20,0.97) 0%,rgba(10,10,10,1) 100%);
+z-index:-2;
+}
+body::after{
+content:'';
+position:fixed;top:0;left:0;width:100%;height:100%;
+background-image:
+radial-gradient(circle at 25% 25%,rgba(255,255,255,0.05) 2px,transparent 0),
+radial-gradient(circle at 75% 75%,rgba(255,255,255,0.05) 1px,transparent 0);
+background-size:30px 30px,20px 20px;
+opacity:.3;z-index:-1;
+}
+.container{max-width:1400px;margin:0 auto;padding:0 40px;}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:40px 0;}
+.logo{
+font-family:'Cinzel',serif;
+font-size:26px;font-weight:600;letter-spacing:4px;
+cursor:pointer;position:relative;color:#e8e8e8;
+}
+.logo::after{
+content:'';position:absolute;bottom:-8px;left:0;width:100%;height:1px;
+background:linear-gradient(90deg,transparent,#c00,transparent);
+}
+.quote-display{
+font-size:15px;letter-spacing:1.5px;font-style:italic;
+padding:12px 20px;border-radius:2px;text-align:center;
+border:1px solid rgba(200,0,0,0.2);background:rgba(20,20,20,0.5);
+backdrop-filter:blur(10px);cursor:pointer;
+}
+.page-title{
+font-family:'Cinzel',serif;font-size:52px;font-weight:600;
+text-align:center;margin:80px 0 30px;letter-spacing:4px;
+position:relative;color:#e8e8e8;
+}
+.page-title::after{
+content:'';position:absolute;bottom:-20px;left:50%;
+transform:translateX(-50%);width:180px;height:2px;
+background:linear-gradient(90deg,transparent,#c00,transparent);
+}
+.page-subtitle{text-align:center;font-size:20px;margin-bottom:80px;color:rgba(232,232,232,0.7);font-style:italic;}
+.music-gallery{
+display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:80px;
+}
+.music-card{display:flex;flex-direction:column;align-items:center;}
+.record-player{
+position:relative;width:280px;height:280px;margin:0 auto 30px;cursor:pointer;
+}
+.record{
+position:absolute;width:100%;height:100%;border-radius:50%;
+background:radial-gradient(circle,#111 0%,#000 70%),
+repeating-radial-gradient(circle,transparent 0,rgba(50,50,50,0.1) 1px,transparent 2px,transparent 10px);
+box-shadow:0 0 0 8px #222,0 0 0 10px #111,inset 0 0 20px rgba(0,0,0,.8);
+overflow:hidden;transition:.3s;
+}
+.record-cover{position:absolute;width:100%;height:100%;border-radius:50%;overflow:hidden;z-index:2;}
+.record-cover img{width:100%;height:100%;object-fit:cover;}
+.record-arm{
+position:absolute;width:120px;height:8px;top:50%;left:50%;
+background:linear-gradient(to right,#333,#555,#333);
+transform-origin:left center;border-radius:4px;transform:rotate(-25deg);
+transition:.8s;z-index:4;
+}
+.record-player.playing .record{animation:spin 3s linear infinite;}
+.record-player.playing .record-arm{transform:rotate(0deg);}
+@keyframes spin{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+.play-indicator{
+position:absolute;bottom:20px;right:20px;width:40px;height:40px;
+background:rgba(200,0,0,.8);border-radius:50%;
+display:flex;align-items:center;justify-content:center;z-index:5;
+}
+.play-indicator i{color:#e8e8e8;font-size:16px;}
+.music-info{text-align:center;width:100%;}
+.music-title{font-family:'Cinzel',serif;font-size:20px;margin-bottom:8px;}
+.music-artist{font-size:16px;color:rgba(232,232,232,.7);margin-bottom:12px;font-style:italic;}
+.music-description{font-size:14px;color:rgba(232,232,232,.6);font-style:italic;line-height:1.5;}
+.back-btn{
+position:fixed;bottom:40px;left:40px;padding:14px 28px;
+background:rgba(20,20,20,.7);border:1px solid rgba(200,0,0,.3);
+color:#e8e8e8;font-size:14px;cursor:pointer;
+text-transform:uppercase;font-family:'Cinzel',serif;
+backdrop-filter:blur(10px);
+}
+@media(max-width:768px){
+.music-gallery{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:60px;}
+.record-player{width:240px;height:240px;}
+.page-title{font-size:42px;margin:60px 0 25px;}
+}
+</style>
 </head>
 <body>
-    <div class="baroque-border border-top"></div>
-    <div class="baroque-border border-bottom"></div>
-    <div class="baroque-border border-left"></div>
-    <div class="baroque-border border-right"></div>
-    
-    <div class="container">
-        <nav class="navbar">
-            <div class="logo" onclick="window.open('index.html', '_self')">Xyrathis</div>
-            <div class="quote-section">
-                <div class="quote-display" id="quoteDisplay">"最珍稀莫过于结构性权利中的独一无二。"</div>
-            </div>
-        </nav>
+<div class="container">
+<nav class="navbar">
+<div class="logo" onclick="location.href='index.html'">Xyrathis</div>
+<div class="quote-display" id="quoteDisplay"></div>
+</nav>
 
-        <h1 class="page-title">MY MUSIC</h1>
-        <p class="page-subtitle">ay mi gatito miau miau!</p>
-        
-        <div class="music-section">
-            <div class="music-gallery" id="musicGallery">
-            </div>
-        </div>
-        
-        <div class="ornament ornament-1"></div>
-        <div class="ornament ornament-2"></div>
+<h1 class="page-title">MY MUSIC</h1>
+<p class="page-subtitle">ay mi gatito miau miau!</p>
+
+<div class="music-section">
+<div class="music-gallery" id="musicGallery"></div>
+</div>
+</div>
+
+<button class="back-btn" onclick="location.href='index.html'">BACK TO HOME</button>
+
+<script>
+const quoteDisplay=document.getElementById('quoteDisplay');
+const quotes=[
+"最珍稀莫过于结构性权利中的独一无二。",
+"Prediction = Control",
+"To be is to have been.",
+"Aal izz well.",
+"Memoryless property.",
+"规则是惯性，而喜欢是本能。",
+"最孤独的时光塑造最坚韧的自己。",
+"足以自杀的勇气和力量同样足以重生。",
+"Only in their dreams can man be truly free.",
+"世异则事异，事异则备变。",
+"正如最混沌的骚乱也精密有制。",
+"Time is rotting on me.",
+"我的人生不需要向任何人解释。",
+"The fjord itself is as short as a hesitation.",
+"一叶知秋。"
+];
+quoteDisplay.textContent='"'+quotes[Math.floor(Math.random()*quotes.length)]+'"';
+
+const musicTracks=[
+{
+title:"Pride & Prejudice",
+artist:"Xyrathis",
+description:"Babel blockade severs consensus and truth. Deconstruction enacts the violence inherent in understanding.",
+image:"SNAKE.jpg",
+audio:"SNAKE.mp3"
+}
+];
+
+let currentAudio=null;
+let currentPlayer=null;
+
+function loadMusic(){
+const gallery=document.getElementById('musicGallery');
+
+musicTracks.forEach((track,index)=>{
+const card=document.createElement('div');
+card.className='music-card';
+
+card.innerHTML=`
+<div class="record-player" data-index="${index}">
+    <div class="record">
+        <div class="record-cover"><img src="${track.image}"></div>
     </div>
-    
-    <button class="back-btn" onclick="window.open('index.html', '_self')">BACK TO HOME</button>
+    <div class="record-arm"></div>
+    <div class="play-indicator"><i class="fas fa-play"></i></div>
+</div>
+<div class="music-info">
+    <h3 class="music-title">${track.title}</h3>
+    <p class="music-artist">${track.artist}</p>
+    <p class="music-description">${track.description}</p>
+</div>
+`;
 
-    <script>
-        const quoteDisplay = document.getElementById('quoteDisplay');
-        const quotes = [
-            { text: "最珍稀莫过于结构性权利中的独一无二。", date: "2025.10.01" },
-            { text: "Prediction = Control ", date: "2025.08.07" },
-            { text: "To be is to have been.", date: "2025-07-11" },
-            { text: "Aal izz well.", date: "2025-06-05" },
-            { text: "Memoryless property.", date: "2025-01-15" },
-            { text: "规则是惯性，而喜欢是本能。", date: "2024-11-327" },
-            { text: "最孤独的时光塑造最坚韧的自己。", date: "2024-08-25" },
-            { text: "Memoryless property.", date: "2024-01-05" },
-            { text: "足以自杀的勇气和力量同样足以重生。", date: "2023-10-24" },
-            { text: "Only in their dreams can man be turly free. ", date: "2023-09-22" },
-            { text: "世异则事异，事异则备变。", date: "2023-08-05" },
-            { text: "正如最混沌的骚乱也精密有制。", date: "2023-04-20" },
-            { text: "Time is rotting on me.", date: "2023-03-05" },
-            { text: "我的人生不需要向任何人解释。",date: "2022-12-14" },
-            { text: "The fjord itself is as short as a hesitation.", date: "2022-6-30" },
-            { text: "一叶知秋。", date: "2021-02-03" },
-        ];
+const player=card.querySelector('.record-player');
 
-        function showRandomQuote() {
-            const randomIndex = Math.floor(Math.random() * quotes.length);
-            quoteDisplay.textContent = `"${quotes[randomIndex].text}"`;
-        }
+player.addEventListener('click',()=>togglePlay(track.audio,player));
 
-        showRandomQuote();
+gallery.appendChild(card);
+});
+}
 
-        const musicTracks = [
-            {
-                title: "Pride & Prejudice",
-                artist: "Xyrathis",
-                description: "Babel blockade severs consensus and truth.Deconstruction enacts the violence inherent in understanding.",
-                image: "SNAKE.jpg",
-                audio: "SNAKE.mp3"
-            },
-        ];
+function togglePlay(src,player){
+if(currentAudio && currentPlayer===player){
+currentAudio.pause();
+currentAudio.currentTime=0;
+currentAudio=null;
+player.classList.remove("playing");
+player.querySelector("i").className="fas fa-play";
+currentPlayer=null;
+return;
+}
 
-        let currentAudio = null;
-        let currentPlayer = null;
+if(currentAudio){
+currentAudio.pause();
+currentAudio.currentTime=0;
+currentPlayer.classList.remove("playing");
+currentPlayer.querySelector("i").className="fas fa-play";
+}
 
-        function loadMusic() {
-            const gallery = document.getElementById('musicGallery');
-            
-            musicTracks.forEach((track, index) => {
-                const musicCard = document.createElement('div');
-                musicCard.className = 'music-card';
-                
-                musicCard.innerHTML = `
-                    <div class="record-player" data-index="${index}">
-                        <div class="record-container">
-                            <div class="record">
-                                <div class="vinyl-glow"></div>
-                                <div class="record-cover">
-                                    <img src="${track.image}" alt="${track.title}">
-                                </div>
-                            </div>
-                            <div class="record-arm"></div>
-                        </div>
-                        <div class="play-indicator">
-                            <i class="fas fa-play"></i>
-                        </div>
-                    </div>
-                    <div class="music-info">
-                        <h3 class="music-title">${track.title}</h3>
-                        <p class="music-artist">${track.artist}</p>
-                        <p class="music-description">${track.description}</p>
-                    </div>
-                `;
-                
-                const player = musicCard.querySelector('.record-player');
-                player.addEventListener('mouseenter', () => {
-                    playTrack(track.audio, player);
-                });
-                
-                player.addEventListener('mouseleave', () => {
-                    stopTrack(player);
-                });
-                
-                gallery.appendChild(musicCard);
-            });
-        }
+currentAudio=new Audio(src);
+currentAudio.play();
+player.classList.add("playing");
+player.querySelector("i").className="fas fa-pause";
+currentPlayer=player;
 
-        function playTrack(audioSrc, player) {
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-                if (currentPlayer) {
-                    currentPlayer.querySelector('.play-indicator i').className = 'fas fa-play';
-                }
-            }
-            
-            currentAudio = new Audio(audioSrc);
-            currentAudio.play();
-            currentPlayer = player;
-            
-            player.querySelector('.play-indicator i').className = 'fas fa-pause';
-        }
+currentAudio.onended=()=>{
+player.classList.remove("playing");
+player.querySelector("i").className="fas fa-play";
+currentAudio=null;
+currentPlayer=null;
+};
+}
 
-        function stopTrack(player) {
-            if (currentAudio && currentPlayer === player) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-                player.querySelector('.play-indicator i').className = 'fas fa-play';
-                currentAudio = null;
-                currentPlayer = null;
-            }
-        }
-
-        loadMusic();
-    </script>
+loadMusic();
+</script>
 </body>
 </html>

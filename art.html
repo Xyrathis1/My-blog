@@ -62,6 +62,10 @@ transform:translateX(-50%);width:180px;height:2px;
 background:linear-gradient(90deg,transparent,#c00,transparent);
 }
 .page-subtitle{text-align:center;font-size:20px;margin-bottom:80px;color:rgba(232,232,232,0.7);font-style:italic;}
+#wallet-address {
+  cursor: pointer;
+  text-decoration: underline;
+}
 .music-gallery{
 display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:80px;
 }
@@ -118,7 +122,7 @@ backdrop-filter:blur(10px);
 <div class="quote-display" id="quoteDisplay"></div>
 </nav>
 <h1 class="page-title">MY MUSIC</h1>
-<p class="page-subtitle">ay mi gatito miau miau!</p>
+<p class="page-subtitle">Patronage : <span id="wallet-address">0xc044dfa7fF57961443cFa2966596080Bd2034552</span></p>
 <div class="music-section">
 <div class="music-gallery" id="musicGallery"></div>
 </div>
@@ -217,6 +221,45 @@ currentPlayer=null;
 };
 }
 loadMusic();
+
+// 更新后的复制功能，添加 fallback 以支持更多环境
+const walletAddress = document.getElementById('wallet-address');
+walletAddress.addEventListener('click', () => {
+  const textToCopy = walletAddress.textContent;
+  copyToClipboard(textToCopy);
+});
+
+function copyToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Wallet address copied to clipboard!');
+    }).catch(err => {
+      console.error('Failed to copy with clipboard API: ', err);
+      fallbackCopyText(text);
+    });
+  } else {
+    fallbackCopyText(text);
+  }
+}
+
+function fallbackCopyText(text) {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed";  // 避免滚动到页面底部
+  textArea.style.left = "-9999px";
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    const successful = document.execCommand('copy');
+    const msg = successful ? 'Wallet address copied to clipboard (fallback)!' : 'Failed to copy wallet address. Please try manually.';
+    alert(msg);
+  } catch (err) {
+    console.error('Fallback copy failed: ', err);
+    alert('Failed to copy wallet address. Please try manually.');
+  }
+  document.body.removeChild(textArea);
+}
 </script>
 </body>
 </html>

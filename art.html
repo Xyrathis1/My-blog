@@ -117,17 +117,13 @@ backdrop-filter:blur(10px);
 <div class="logo" onclick="location.href='index.html'">Xyrathis</div>
 <div class="quote-display" id="quoteDisplay"></div>
 </nav>
-
 <h1 class="page-title">MY MUSIC</h1>
 <p class="page-subtitle">ay mi gatito miau miau!</p>
-
 <div class="music-section">
 <div class="music-gallery" id="musicGallery"></div>
 </div>
 </div>
-
 <button class="back-btn" onclick="location.href='index.html'">BACK TO HOME</button>
-
 <script>
 const quoteDisplay=document.getElementById('quoteDisplay');
 const quotes=[
@@ -148,38 +144,33 @@ const quotes=[
 "一叶知秋。"
 ];
 quoteDisplay.textContent='"'+quotes[Math.floor(Math.random()*quotes.length)]+'"';
-
 const musicTracks=[
 {
 title:"Pride & Prejudice",
 artist:"Xyrathis",
 description:"The curse of Babel:until deconstruction itself is alienated into a violence of understanding.",
 image:"SNAKE.jpg",
-audio:"SNAKE.mp3",
-}
+audio:"SNAKE.mp3"
+},
 {
 title:"Fiddlesticks",
 artist:"Xyrathis",
 description:"As the real world crumbles, the world within my mind grows ever more vivid..",
 image:"Fiddlesticks.jpg",
-audio:"Fiddlesticks.mp3",
+audio:"Fiddlesticks.mp3"
 }
 ];
-
 let currentAudio=null;
 let currentPlayer=null;
-
 function loadMusic(){
 const gallery=document.getElementById('musicGallery');
-
 musicTracks.forEach((track,index)=>{
 const card=document.createElement('div');
 card.className='music-card';
-
 card.innerHTML=`
 <div class="record-player" data-index="${index}">
     <div class="record">
-        <div class="record-cover"><img src="${track.image}"></div>
+        <div class="record-cover"><img src="${track.image}" alt="${track.title} cover"></div>
     </div>
     <div class="record-arm"></div>
     <div class="play-indicator"><i class="fas fa-play"></i></div>
@@ -190,15 +181,11 @@ card.innerHTML=`
     <p class="music-description">${track.description}</p>
 </div>
 `;
-
 const player=card.querySelector('.record-player');
-
 player.addEventListener('click',()=>togglePlay(track.audio,player));
-
 gallery.appendChild(card);
 });
 }
-
 function togglePlay(src,player){
 if(currentAudio && currentPlayer===player){
 currentAudio.pause();
@@ -209,20 +196,19 @@ player.querySelector("i").className="fas fa-play";
 currentPlayer=null;
 return;
 }
-
 if(currentAudio){
 currentAudio.pause();
 currentAudio.currentTime=0;
 currentPlayer.classList.remove("playing");
 currentPlayer.querySelector("i").className="fas fa-play";
 }
-
 currentAudio=new Audio(src);
-currentAudio.play();
+currentAudio.play().catch(error => {
+console.error('Audio playback error:', error);
+});
 player.classList.add("playing");
 player.querySelector("i").className="fas fa-pause";
 currentPlayer=player;
-
 currentAudio.onended=()=>{
 player.classList.remove("playing");
 player.querySelector("i").className="fas fa-play";
@@ -230,7 +216,6 @@ currentAudio=null;
 currentPlayer=null;
 };
 }
-
 loadMusic();
 </script>
 </body>

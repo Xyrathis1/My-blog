@@ -91,123 +91,62 @@
         }
 
         .quote-display {
-            font-size: 14px;
-            letter-spacing: 1px;
+            font-size: 15px;
+            letter-spacing: 1.5px;
             font-style: italic;
-            cursor: pointer;
-            padding: 8px 15px;
-            border-radius: 2px;
-            transition: all 0.3s;
-            max-width: 300px;
+            padding: 8px 0;
             text-align: center;
-            border: 1px solid rgba(200, 0, 0, 0.3);
-            background: rgba(20, 20, 20, 0.7);
             font-family: 'Cormorant Garamond', serif;
+            color: rgba(232, 232, 232, 0.9);
+            font-weight: 400;
+            position: relative;
+            max-width: 300px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: default;
+            transition: all 0.6s ease;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 优雅的渐变色文字效果 */
+        .quote-display::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #c00, transparent);
+            transition: width 0.8s ease;
+        }
+
+        .quote-display:hover::before {
+            width: 100%;
+        }
+
+        .quote-display .quote-text {
+            position: relative;
+            display: inline-block;
+            padding: 0 10px;
+        }
+
+
+        .quote-display .quote-text::first-letter {
+            font-size: 1.2em;
+            color: #c00;
         }
 
         .quote-display:hover {
-            background: rgba(200, 0, 0, 0.1);
-            border-color: rgba(200, 0, 0, 0.5);
-        }
-
-        .quote-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(5, 5, 5, 0.9);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-
-        .quote-content {
-            background-color: rgba(15, 15, 15, 0.95);
-            border: 1px solid rgba(200, 0, 0, 0.3);
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            padding: 30px;
-            border-radius: 2px;
-            box-shadow: 0 0 50px rgba(200, 0, 0, 0.2);
-            position: relative;
-        }
-
-        .quote-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #c00, transparent);
-        }
-
-        .quote-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(200, 0, 0, 0.2);
-        }
-
-        .quote-header h2 {
-            font-family: 'Cinzel', serif;
-            font-size: 22px;
-            letter-spacing: 2px;
-            font-weight: 500;
-            color: #e8e8e8;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            color: #e8e8e8;
-            font-size: 24px;
-            cursor: pointer;
-            transition: color 0.3s;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .close-modal:hover {
-            color: #c00;
-        }
-
-        .quote-list {
-            list-style: none;
-        }
-
-        .quote-item {
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-        }
-
-        .quote-item:last-child {
-            border-bottom: none;
-        }
-
-        .quote-text {
-            font-style: italic;
-            margin-bottom: 8px;
-            line-height: 1.6;
-            font-size: 17px;
-            color: #e8e8e8;
-        }
-
-        .quote-date {
-            font-size: 13px;
-            color: #c00;
-            letter-spacing: 1px;
+            color: #fff;
+            text-shadow: 
+                0 0 15px rgba(200, 0, 0, 0.4),
+                0 0 30px rgba(200, 0, 0, 0.2);
+            transform: translateY(-1px);
         }
 
         .main-content {
@@ -541,7 +480,8 @@
            
             .quote-display {
                 max-width: 220px;
-                font-size: 13px;
+                font-size: 14px;
+                min-height: 35px;
             }
 
             .email-container {
@@ -567,7 +507,9 @@
            
             .quote-display {
                 max-width: 280px;
-                font-size: 14px;
+                font-size: 15px;
+                min-height: 40px;
+                margin-top: 10px;
             }
            
             .name {
@@ -577,6 +519,14 @@
             .email-container {
                 justify-content: center;
                 font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .quote-display {
+                font-size: 14px;
+                min-height: 35px;
+                letter-spacing: 1px;
             }
         }
     </style>
@@ -631,79 +581,44 @@
         </section>
     </div>
 
-    <div class="quote-modal" id="quoteModal">
-        <div class="quote-content">
-            <div class="quote-header">
-                <h2>Saying</h2>
-                <button class="close-modal" id="closeModal">&times;</button>
-            </div>
-            <ul class="quote-list" id="quoteList">
-           
-            </ul>
-        </div>
-    </div>
-
     <script>
         const quoteDisplay = document.getElementById('quoteDisplay');
-        const quoteModal = document.getElementById('quoteModal');
-        const closeModal = document.getElementById('closeModal');
-        const quoteList = document.getElementById('quoteList');
 
         const quotes = [
-            { text: "最珍稀莫过于结构性权利中的独一无二。", date: "2025.10.01" },
-            { text: "Prediction = Control ", date: "2025.08.07" },
-            { text: "To be is to have been.", date: "2025-07-11" },
-            { text: "Aal izz well.", date: "2025-06-05" },
-            { text: "Memoryless property.", date: "2025-01-15" },
-            { text: "规则是惯性，而喜欢是本能。", date: "2024-11-327" },
-            { text: "最孤独的时光塑造最坚韧的自己。", date: "2024-08-25" },
-            { text: "Memoryless property.", date: "2024-01-05" },
-            { text: "足以自杀的勇气和力量同样足以重生。", date: "2023-10-24" },
-            { text: "Only in their dreams can man be turly free. ", date: "2023-09-22" },
-            { text: "世异则事异，事异则备变。", date: "2023-08-05" },
-            { text: "正如最混沌的骚乱也精密有制。", date: "2023-04-20" },
-            { text: "Time is rotting on me.", date: "2023-03-05" },
-            { text: "我的人生不需要向任何人解释。",date: "2022-12-14" },
-            { text: "The fjord itself is as short as a hesitation.", date: "2022-6-30" },
-            { text: "一叶知秋。", date: "2021-02-03" },
+            "Experience is used to counter illusion.",
+            "Pain renders being more pure.",
+            "虚则知实之情，静则知动者正。",
+            "Nothing is more precious than the uniqueness found within structural rights.”",
+            "Prediction = Control",
+            "To be is to have been.",
+            "Aal izz well.",
+            "Memoryless property.",
+            "规则是惯性，而喜欢是本能。",
+            "最孤独的时光塑造最坚韧的自己。",
+            "The courage and strength enough to end a life are equally enough to begin anew.",
+            "在秦王宫外看一次稀世珍宝，或许就不会那么迷恋九鼎了。",
+            "I pray to myself for myself.",
+            "Only in their dreams can man be turly free.",
+            "世异则事异，事异则备变。",
+            "Be a part of being.",
+            "正如最混沌的骚乱也精密有制。",
+            "Time is rotting on me.",
+            "My life is not something I owe anyone an explanation for.",
+            "The fjord itself is as short as a hesitation.",
+            "一叶知秋。",
         ];
 
         function showRandomQuote() {
             const randomIndex = Math.floor(Math.random() * quotes.length);
-            quoteDisplay.textContent = `"${quotes[randomIndex].text}"`;
+            const quote = quotes[randomIndex];
+            
+            quoteDisplay.innerHTML = `<span class="quote-text">"${quote}"</span>`;
         }
-
-        function showQuoteList() {
-            quoteList.innerHTML = '';
-            quotes.forEach(quote => {
-                const li = document.createElement('li');
-                li.className = 'quote-item';
-                li.innerHTML = `
-                    <div class="quote-text">"${quote.text}"</div>
-                    <div class="quote-date">${quote.date}</div>
-                `;
-                quoteList.appendChild(li);
-            });
-        }
-
-        quoteDisplay.addEventListener('click', () => {
-            showQuoteList();
-            quoteModal.style.display = 'flex';
-        });
-
-        closeModal.addEventListener('click', () => {
-            quoteModal.style.display = 'none';
-        });
-
-        quoteModal.addEventListener('click', (e) => {
-            if (e.target === quoteModal) {
-                quoteModal.style.display = 'none';
-            }
-        });
 
         showRandomQuote();
 
-        // Email copy functionality
+        setInterval(showRandomQuote, 30000);
+
         const emailText = document.getElementById('emailText');
         const copyButton = document.getElementById('copyButton');
         const copyFeedback = document.getElementById('copyFeedback');
@@ -711,7 +626,6 @@
         function copyEmail() {
             const email = emailText.textContent;
             navigator.clipboard.writeText(email).then(() => {
-                // Show feedback without changing email text
                 copyFeedback.classList.add('show');
                 setTimeout(() => {
                     copyFeedback.classList.remove('show');

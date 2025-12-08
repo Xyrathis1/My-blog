@@ -159,13 +159,49 @@ display:flex;align-items:center;justify-content:center;z-index:5;
 .music-title{font-family:'Cinzel',serif;font-size:20px;margin-bottom:8px;}
 .music-artist{font-size:16px;color:rgba(232,232,232,.7);margin-bottom:12px;font-style:italic;}
 .music-description{font-size:14px;color:rgba(232,232,232,.6);font-style:italic;line-height:1.5;}
+
+/* 更新的 BACK 按钮样式 - 与项目页面保持一致 */
 .back-btn{
-position:fixed;bottom:40px;left:40px;padding:14px 28px;
-background:rgba(20,20,20,.7);border:1px solid rgba(200,0,0,.3);
-color:#e8e8e8;font-size:14px;cursor:pointer;
-text-transform:uppercase;font-family:'Cinzel',serif;
-backdrop-filter:blur(10px);
+    position: fixed;
+    bottom: 40px;
+    left: 40px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, rgba(25, 25, 25, 0.8), rgba(15, 15, 15, 0.9));
+    border: 1px solid rgba(200, 0, 0, 0.3);
+    color: #e8e8e8;
+    font-size: 14px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+    font-weight: 500;
+    z-index: 5;
+    backdrop-filter: blur(10px);
+    box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
+
+.back-btn:hover {
+    border-color: #c00;
+    box-shadow: 
+        0 0 25px rgba(200, 0, 0, 0.4),
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));
+    transform: translateY(-2px);
+    color: #fff;
+}
+
+.back-btn:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 0 15px rgba(200, 0, 0, 0.3),
+        0 5px 20px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
 @media(max-width:768px){
 .music-gallery{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:60px;}
 .record-player{width:240px;height:240px;}
@@ -175,12 +211,25 @@ backdrop-filter:blur(10px);
     font-size: 14px;
     min-height: 35px;
 }
+.back-btn {
+    bottom: 25px;
+    left: 25px;
+    padding: 12px 24px;
+    font-size: 13px;
+}
 }
 @media(max-width:480px){
 .quote-display {
     font-size: 14px;
     min-height: 35px;
     letter-spacing: 1px;
+}
+.back-btn {
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    font-size: 12px;
+    letter-spacing: 1.5px;
 }
 }
 </style>

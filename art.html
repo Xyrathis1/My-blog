@@ -45,12 +45,70 @@ cursor:pointer;position:relative;color:#e8e8e8;
 content:'';position:absolute;bottom:-8px;left:0;width:100%;height:1px;
 background:linear-gradient(90deg,transparent,#c00,transparent);
 }
-.quote-display{
-font-size:15px;letter-spacing:1.5px;font-style:italic;
-padding:12px 20px;border-radius:2px;text-align:center;
-border:1px solid rgba(200,0,0,0.2);background:rgba(20,20,20,0.5);
-backdrop-filter:blur(10px);cursor:pointer;
+
+/* 更新的签名样式 */
+.quote-section {
+    position: relative;
 }
+
+.quote-display {
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    font-style: italic;
+    padding: 8px 0;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    color: rgba(232, 232, 232, 0.9);
+    font-weight: 400;
+    position: relative;
+    max-width: 300px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: default;
+    transition: all 0.6s ease;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* 优雅的渐变色文字效果 */
+.quote-display::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c00, transparent);
+    transition: width 0.8s ease;
+}
+
+.quote-display:hover::before {
+    width: 100%;
+}
+
+.quote-display .quote-text {
+    position: relative;
+    display: inline-block;
+    padding: 0 10px;
+}
+
+.quote-display .quote-text::first-letter {
+    font-size: 1.2em;
+    color: #c00;
+}
+
+.quote-display:hover {
+    color: #fff;
+    text-shadow: 
+        0 0 15px rgba(200, 0, 0, 0.4),
+        0 0 30px rgba(200, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
 .page-title{
 font-family:'Cinzel',serif;font-size:52px;font-weight:600;
 text-align:center;margin:80px 0 30px;letter-spacing:4px;
@@ -112,6 +170,18 @@ backdrop-filter:blur(10px);
 .music-gallery{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:60px;}
 .record-player{width:240px;height:240px;}
 .page-title{font-size:42px;margin:60px 0 25px;}
+.quote-display {
+    max-width: 220px;
+    font-size: 14px;
+    min-height: 35px;
+}
+}
+@media(max-width:480px){
+.quote-display {
+    font-size: 14px;
+    min-height: 35px;
+    letter-spacing: 1px;
+}
 }
 </style>
 </head>
@@ -119,7 +189,9 @@ backdrop-filter:blur(10px);
 <div class="container">
 <nav class="navbar">
 <div class="logo" onclick="location.href='index.html'">Xyrathis</div>
-<div class="quote-display" id="quoteDisplay"></div>
+<div class="quote-section">
+    <div class="quote-display" id="quoteDisplay"></div>
+</div>
 </nav>
 <h1 class="page-title">MY MUSIC</h1>
 <p class="page-subtitle">Patronage : <span id="wallet-address">0xc044dfa7fF57961443cFa2966596080Bd2034552</span></p>
@@ -127,27 +199,45 @@ backdrop-filter:blur(10px);
 <div class="music-gallery" id="musicGallery"></div>
 </div>
 </div>
-<button class="back-btn" onclick="location.href='index.html'">BACK TO HOME</button>
+<button class="back-btn" onclick="location.href='index.html'">BACK</button>
 <script>
 const quoteDisplay=document.getElementById('quoteDisplay');
 const quotes=[
-"最珍稀莫过于结构性权利中的独一无二。",
-"Prediction = Control",
-"To be is to have been.",
-"Aal izz well.",
-"Memoryless property.",
-"规则是惯性，而喜欢是本能。",
-"最孤独的时光塑造最坚韧的自己。",
-"足以自杀的勇气和力量同样足以重生。",
-"Only in their dreams can man be truly free.",
-"世异则事异，事异则备变。",
-"正如最混沌的骚乱也精密有制。",
-"Time is rotting on me.",
-"我的人生不需要向任何人解释。",
-"The fjord itself is as short as a hesitation.",
-"一叶知秋。"
+            "Experience is used to counter illusion.",
+            "Pain renders being more pure.",
+            "虚则知实之情，静则知动者正。",
+            "Nothing is more precious than the uniqueness found within structural rights.”",
+            "Prediction = Control",
+            "To be is to have been.",
+            "Aal izz well.",
+            "Memoryless property.",
+            "规则是惯性，而喜欢是本能。",
+            "最孤独的时光塑造最坚韧的自己。",
+            "The courage and strength enough to end a life are equally enough to begin anew.",
+            "在秦王宫外看一次稀世珍宝，或许就不会那么迷恋九鼎了。",
+            "I pray to myself for myself.",
+            "Only in their dreams can man be turly free.",
+            "世异则事异，事异则备变。",
+            "Be a part of being.",
+            "正如最混沌的骚乱也精密有制。",
+            "Time is rotting on me.",
+            "My life is not something I owe anyone an explanation for.",
+            "The fjord itself is as short as a hesitation.",
+            "一叶知秋。",
 ];
-quoteDisplay.textContent='"'+quotes[Math.floor(Math.random()*quotes.length)]+'"';
+
+function showRandomQuote() {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const quote = quotes[randomIndex];
+    quoteDisplay.innerHTML = `<span class="quote-text">"${quote}"</span>`;
+}
+
+// 初始化显示一条名言
+showRandomQuote();
+
+// 每30秒切换一次
+setInterval(showRandomQuote, 30000);
+
 const musicTracks=[
 {
 title:"Pride & Prejudice",
